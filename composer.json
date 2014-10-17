@@ -1,0 +1,25 @@
+{
+    "name": "avalon/database",
+    "description": "Avalon Database Component",
+    "keywords": ["avalon", "database", "orm"],
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Jack Polgar",
+            "email": "jack@polgar.id.au"
+        }
+    ],
+    "require": {
+        "doctrine/orm": "2.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Avalon\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    }
+}
