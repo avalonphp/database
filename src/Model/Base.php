@@ -1,0 +1,100 @@
+<?php
+/*
+ * Avalon
+ * Copyright 2011-2014 Jack Polgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace Avalon\Database\Model;
+
+/**
+ * Base model class.
+ *
+ * @author Jack Polgar <jack@polgar.id.au>
+ */
+abstract class Base
+{
+    /**
+     * Whether or not the model already exists in the database.
+     *
+     * @var bool
+     */
+    protected $_isNew;
+
+    /**
+     * Column data types to convert to/from.
+     *
+     * @var array
+     */
+    protected static $_dataTypes = [];
+
+    /**
+     * @param array $data  Model data.
+     * @param bool  $isNew Whether or not it exists in the database.
+     */
+    public function __construct(array $data = [], $isNew = true)
+    {
+        if ($isNew) {
+            foreach ($data as $key => $value) {
+                $this->{$key} = $value;
+            }
+        } else {
+            // Convert data from a safely storable format
+            foreach (static::convertToDataTypes($data) as $key => $value) {
+                $this->{$key} = $value;
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Class Methods
+
+    /**
+     * Convert special data to a safely storable format.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public static function convertFromDataTypes(array $data)
+    {
+        foreach (static::$_dataTypes as $column => $type) {
+            if ($type == 'json_array') {
+                $data[$column] = json_encode($data[$column]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Convert data from a safely storable format to actual values.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public static function convertToDataTypes(array $data)
+    {
+        foreach (static::$_dataTypes as $column => $type) {
+            if (isset($data[$column])) {
+                if ($type == 'json_array') {
+                    $data[$column] = json_decode($data[$column], true);
+                }
+            }
+        }
+
+        return $data;
+    }
+}

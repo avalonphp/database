@@ -20,13 +20,14 @@ namespace Avalon\Database;
 
 use ReflectionClass;
 use Avalon\Database\QueryBuilder;
+use Avalon\Database\Model\Base as BaseModel;
 
 /**
  * Database Model.
  *
  * @author Jack Polgar <jack@polgar.id.au>
  */
-abstract class Model
+abstract class Model extends BaseModel
 {
     /**
      * Connection name.
@@ -75,20 +76,7 @@ abstract class Model
             $this->{$field} = $properties->getdefault();
         }
 
-        foreach ($data as $key => $value) {
-            $this->{$key} = $value;
-        }
-
-        if (!$isNew) {
-            // Convert data from a safely storable format
-            foreach (static::$_dataTypes as $column => $type) {
-                if (isset($this->{$column})) {
-                    if ($type == 'json_array') {
-                        $this->{$column} = json_decode($this->{$column}, true);
-                    }
-                }
-            }
-        }
+        parent::__construct($data, $isNew);
     }
 
     // -------------------------------------------------------------------------
@@ -131,7 +119,7 @@ abstract class Model
      */
     public static function insert($data)
     {
-        $data = static::convertDataTypes($data);
+        $data = static::convertFromDataTypes($data);
         return static::connection()->insert(static::tableName(), $data);
     }
 
@@ -276,7 +264,7 @@ abstract class Model
                 $this->id     = static::connection()->lastInsertId();
             }
         } else {
-            $data = static::convertDataTypes($data);
+            $data = static::convertFromDataTypes($this->getData());
             $result = static::connection()->update(static::tableName(), $data, [
                 'id' => $this->id
             ]);
