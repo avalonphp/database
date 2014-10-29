@@ -254,4 +254,14 @@ abstract class Model extends BaseModel
 
         return $result > 0 ? true : false;
     }
+
+    /**
+     * Delete the models row from the database.
+     *
+     * @return integer
+     */
+    public function delete()
+    {
+        return static::connection()->delete(static::tableName(), ['id' => $this->id]);
+    }
 }
