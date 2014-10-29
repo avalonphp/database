@@ -1,0 +1,155 @@
+<?php
+/*
+ * Avalon
+ * Copyright 2011-2014 Jack Polgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace Avalon\Database;
+
+use Avalon\Database\Model\Base as BaseModel;
+
+/**
+ * Validations class.
+ *
+ * @author Jack Polgar <jack@polgar.id.au>
+ */
+class Validations
+{
+    /**
+     * Runs the validations for passed Model and field.
+     *
+     * @param BaseModel $model
+     * @param string    $field
+     * @param array     $validations
+     */
+    public static function run(BaseModel $model, $field, $validations)
+    {
+        // Run validations
+        foreach ($validations as $validation => $options) {
+            // Is this a validation without any options?
+            if (is_numeric($validation)) {
+                $validation = $options;
+            }
+
+            $data = $data = call_user_func_array(
+                [get_called_class(), $validation],
+                [$model, $field, $options]
+            );
+
+            if ($data and $data !== null) {
+                if (is_string($data)) {
+                    $data = ['error' => $data];
+                }
+
+                $data = $data + [
+                    'field' => $field,
+                    'validation' => $validation
+                ];
+
+                $model->addError($field, $validation, $data);
+            }
+        }
+    }
+
+    /**
+     * Checks if the field is unique.
+     *
+     * @param BaseModel $model
+     * @param string    $field
+     */
+    private static function unique(BaseModel $model, $field)
+    {
+        $row = $model::find($field, $model->{$field});
+        if ($row && $row->id != $model->id) {
+            return 'already_in_use';
+        }
+    }
+
+    /**
+     * Checks if the field is set.
+     *
+     * @param BaseModel $model
+     * @param string    $field
+     */
+    private static function required(BaseModel $model, $field)
+    {
+        // if ($field == 'display_order') {
+        //     echo $field;
+        //     var_dump($model->{$field} === '');
+        //     exit;
+        // }
+        if (!isset($model->{$field}) || ($model->{$field} === '')) {
+            return 'required';
+        }
+    }
+
+    /**
+     * Checks if the field is an email address.
+     *
+     * @param BaseModel $model
+     * @param string    $field
+     */
+    private static function email(BaseModel $model, $field)
+    {
+        if (!filter_var($model->{$field}, FILTER_VALIDATE_EMAIL)) {
+            return 'must_be_email';
+        }
+    }
+
+    /**
+     * Validates the minimum length of the field.
+     *
+     * @param BaseModel $model
+     * @param string    $field
+     */
+    private static function minLength(BaseModel $model, $field, $minLength)
+    {
+        if (strlen($model->{$field}) < $minLength) {
+            return [
+                'error'     => "field_too_short",
+                'minLength' => $minLength
+            ];
+        }
+    }
+
+    /**
+     * Validates the maximum length of the field.
+     *
+     * @param BaseModel $model
+     * @param string    $field
+     */
+    private static function maxLength(BaseModel $model, $field, $maxLength)
+    {
+        if (strlen($model->{$field}) > $maxLength) {
+            return [
+                'error'     => "field_too_long",
+                'maxLength' => $maxLength
+            ];
+        }
+    }
+
+    /**
+     * Checks if the field is numeric.
+     *
+     * @param BaseModel $model
+     * @param string    $field
+     */
+    private static function numeric(BaseModel $model, $field)
+    {
+        if (!is_numeric($model->{$field})) {
+            return 'must_be_numeric';
+        }
+    }
+}
