@@ -21,6 +21,7 @@ namespace Avalon\Database;
 use ReflectionClass;
 use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
+use Avalon\Database\Inflector;
 
 /**
  * Database Model.
@@ -168,8 +169,6 @@ abstract class Model extends BaseModel
 
     /**
      * @return string
-     *
-     * @todo Proper class to table name conversion.
      */
     public static function tableName()
     {
@@ -178,9 +177,7 @@ abstract class Model extends BaseModel
         }
 
         $classInfo = new ReflectionClass(get_called_class());
-
-        // This is a hack for now, totally temporary
-        return strtolower($classInfo->getShortName() . 's');
+        return Inflector::tableise($classInfo->getShortName());
     }
 
     /**
