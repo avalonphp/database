@@ -22,6 +22,7 @@ use ReflectionClass;
 use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
 use Avalon\Database\Inflector;
+use Avalon\Database\Model\Relatable;
 
 /**
  * Database Model.
@@ -30,6 +31,8 @@ use Avalon\Database\Inflector;
  */
 abstract class Model extends BaseModel
 {
+    use Relatable;
+
     /**
      * Connection name.
      *
@@ -52,18 +55,14 @@ abstract class Model extends BaseModel
     protected static $_schema = [];
 
     /**
-     * Column data types to convert to/from.
-     *
-     * @var array
+     * Belongs-to relationships.
      */
-    protected static $_dataTypes = [];
+    protected static $_belongsTo = [];
 
     /**
-     * Whether or not the model already exists in the database.
-     *
-     * @var bool
+     * Has-many relationships.
      */
-    protected $_isNew;
+    protected static $_hasMany = [];
 
     /**
      * @param array $data  Model data.
