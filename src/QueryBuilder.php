@@ -108,6 +108,15 @@ class QueryBuilder extends DoctrienQueryBuilder
     }
 
     /**
+     * Returns the number of rows found.
+     *
+     * @return integer
+     */
+    public function rowCount()
+    {
+        return $this->execute()->rowCount();
+    }
+
      * @param string  $predicates The restriction predicates.
      * @param mixed   $value      Value of the restriction.
      * @param integer $type       One of the PDO::PARAM_* constants.
