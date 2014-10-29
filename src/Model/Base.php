@@ -49,7 +49,9 @@ abstract class Base
 
         if ($isNew) {
             foreach ($data as $key => $value) {
-                $this->{$key} = $value;
+                if ($value !== '') {
+                    $this->{$key} = $value;
+                }
             }
         } else {
             // Convert data from a safely storable format
