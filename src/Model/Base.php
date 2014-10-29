@@ -48,11 +48,7 @@ abstract class Base
         $this->_isNew = $isNew;
 
         if ($isNew) {
-            foreach ($data as $key => $value) {
-                if ($value !== '') {
-                    $this->{$key} = $value;
-                }
-            }
+            $this->set($data);
         } else {
             // Convert data from a safely storable format
             foreach (static::convertToDataTypes($data) as $key => $value) {
@@ -101,4 +97,27 @@ abstract class Base
 
         return $data;
     }
+
+    // -------------------------------------------------------------------------
+    // Instance Methods
+
+    /**
+     * Mass set model data.
+     *
+     * @param array $field
+     * @param mixed $value
+     */
+    public function set($field, $value = null)
+    {
+        if (is_array($field)) {
+            foreach ($field as $key => $value) {
+                $this->set($key, $value);
+            }
+        } else {
+            if ($value !== '') {
+                $this->{$field} = $value;
+            }
+        }
+    }
+
 }
