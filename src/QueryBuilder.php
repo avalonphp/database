@@ -34,6 +34,11 @@ class QueryBuilder extends DoctrienQueryBuilder
     protected $modelClass;
 
     /**
+     * @var bool
+     */
+    protected $mergeNextWhere = false;
+
+    /**
      * @param string $class
      */
     public function setModel($class)
@@ -80,7 +85,12 @@ class QueryBuilder extends DoctrienQueryBuilder
      */
     public function where($predicates, $value = null, $type = \PDO::PARAM_STR)
     {
-        parent::where($predicates);
+        if ($this->mergeNextWhere) {
+            $this->mergeNextWhere = false;
+            parent::andWhere($predicates);
+        } else {
+            parent::where($predicates);
+        }
 
         if ($value !== null) {
             $this->_setParameter($predicates, $value, $type);
@@ -117,6 +127,18 @@ class QueryBuilder extends DoctrienQueryBuilder
         return $this->execute()->rowCount();
     }
 
+    /**
+     * Turn the next `where()` into `andWhere()`.
+     *
+     * @return QueryBuilder
+     */
+    public function mergeNextWhere()
+    {
+        $this->mergeNextWhere = true;
+        return $this;
+    }
+
+    /**
      * @param string  $predicates The restriction predicates.
      * @param mixed   $value      Value of the restriction.
      * @param integer $type       One of the PDO::PARAM_* constants.
