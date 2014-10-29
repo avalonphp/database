@@ -28,8 +28,7 @@ use Avalon\Database\Inflector;
 trait Relatable
 {
     /**
-     * Returns an array containing information about the
-     * relation.
+     * Returns an array containing information about the relation.
      *
      * @param string $name Relation name
      * @param array  $info Relation info
@@ -89,7 +88,7 @@ trait Relatable
         // Has-many relationships
         if (isset(static::$_hasMany[$method])) {
             return $this->hasMany($method, static::$_hasMany[$method]);
-        } else if (in_array($method, static::$_hasMany)) {
+        } elseif (in_array($method, static::$_hasMany)) {
             return $this->hasMany($method);
         }
 
