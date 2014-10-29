@@ -209,24 +209,6 @@ abstract class Model extends BaseModel
         return static::$_schema[static::tableName()];
     }
 
-    /**
-     * Convert special data to a safely storable format.
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    public static function convertDataTypes(array $data)
-    {
-        foreach (static::$_dataTypes as $column => $type) {
-            if ($type == 'json_array') {
-                $data[$column] = json_encode($data[$column]);
-            }
-        }
-
-        return $data;
-    }
-
     // -------------------------------------------------------------------------
     // Instance Methods
 
