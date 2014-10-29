@@ -94,7 +94,8 @@ trait Relatable
         }
 
         // Mad method call
-        throw new \BadMethodCallException("Not such method [{$method}]");
+        $className = get_called_class();
+        throw new \BadMethodCallException("Not such method [{$className}::{$method}]");
     }
 
     /**
