@@ -23,6 +23,7 @@ use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
 use Avalon\Database\Inflector;
 use Avalon\Database\Model\Relatable;
+use Avalon\Database\Model\Validatable;
 
 /**
  * Database Model.
@@ -32,6 +33,7 @@ use Avalon\Database\Model\Relatable;
 abstract class Model extends BaseModel
 {
     use Relatable;
+    use Validatable;
 
     /**
      * Connection name.
@@ -63,6 +65,11 @@ abstract class Model extends BaseModel
      * Has-many relationships.
      */
     protected static $_hasMany = [];
+
+    /**
+     * Validation errors.
+     */
+    protected $_errors = [];
 
     /**
      * @param array $data  Model data.
@@ -105,13 +112,13 @@ abstract class Model extends BaseModel
      */
     public static function create($data)
     {
-        $result = static::insert($data);
+        $model = new static($data);
 
-        if ($result) {
-            return static::find(static::connection()->lastInsertId());
-        } else {
-            return $result;
+        if ($model->save()) {
+            return $model;
         }
+
+        return false;
     }
 
     /**
@@ -237,6 +244,11 @@ abstract class Model extends BaseModel
      */
     public function save()
     {
+        // Validate
+        if (!$this->validates()) {
+            return false;
+        }
+
         // Create row if this is a new model
         if ($this->_isNew) {
             $result = static::insert($this->getData());
