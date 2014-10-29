@@ -114,9 +114,7 @@ abstract class Base
                 $this->set($key, $value);
             }
         } else {
-            if ($value !== '') {
-                $this->{$field} = $value;
-            }
+            $this->{$field} = $value;
         }
     }
 

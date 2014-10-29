@@ -229,7 +229,11 @@ abstract class Model extends BaseModel
     {
         $data = [];
         foreach (static::schema() as $field => $property) {
-            $data[$field] = $this->{$field};
+            if ($this->{$field} === '') {
+                $data[$field] = $property->getDefault();
+            } else {
+                $data[$field] = $this->{$field};
+            }
         }
 
         return $data;
