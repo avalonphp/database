@@ -45,6 +45,8 @@ abstract class Base
      */
     public function __construct(array $data = [], $isNew = true)
     {
+        $this->_isNew = $isNew;
+
         if ($isNew) {
             foreach ($data as $key => $value) {
                 $this->{$key} = $value;

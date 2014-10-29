@@ -77,8 +77,6 @@ abstract class Model extends BaseModel
      */
     public function __construct(array $data = [], $isNew = true)
     {
-        $this->_isNew = $isNew;
-
         foreach (static::schema() as $field => $properties) {
             $this->{$field} = $properties->getdefault();
         }
