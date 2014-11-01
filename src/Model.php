@@ -18,6 +18,7 @@
 
 namespace Avalon\Database;
 
+use DateTime;
 use ReflectionClass;
 use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
@@ -126,10 +127,10 @@ abstract class Model extends BaseModel
      *
      * @return integer
      */
-    public static function insert($data)
+    public static function insert($data, array $types = [])
     {
         $data = static::convertFromDataTypes($data);
-        return static::connection()->insert(static::tableName(), $data);
+        return static::connection()->insert(static::tableName(), $data, $types);
     }
 
     /**
@@ -251,19 +252,34 @@ abstract class Model extends BaseModel
             return false;
         }
 
+        $data  = $this->getData();
+        $types = [];
+
         // Create row if this is a new model
         if ($this->_isNew) {
-            $result = static::insert($this->getData());
+            if (isset(static::schema()['created_at'])) {
+                $data['created_at'] = new DateTime('now');
+                $types['created_at'] = 'datetime';
+            }
+
+            $result = static::insert($data, $types);
 
             if ($result) {
                 $this->_isNew = false;
                 $this->id     = static::connection()->lastInsertId();
             }
         } else {
-            $data = static::convertFromDataTypes($this->getData());
-            $result = static::connection()->update(static::tableName(), $data, [
-                'id' => $this->id
-            ]);
+            if (isset(static::schema()['updated_at'])) {
+                $data['updated_at'] = new DateTime('now');
+                $types['updated_at'] = 'datetime';
+            }
+
+            $data = static::convertFromDataTypes($data);
+            $result = static::connection()->update(
+                static::tableName(), $data,
+                ['id' => $this->id],
+                $types
+            );
         }
 
         return $result > 0 ? true : false;
