@@ -75,6 +75,11 @@ abstract class Model extends BaseModel
     protected static $_validates = [];
 
     /**
+     * Fields to remove when converting to array.
+     */
+    protected static $_excludeFromArray = [];
+
+    /**
      * Validation errors.
      */
     protected $_errors = [];
@@ -242,6 +247,20 @@ abstract class Model extends BaseModel
             } else {
                 $data[$field] = $this->{$field};
             }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $data = $this->getData();
+
+        foreach (static::$_excludeFromArray as $field) {
+            unset($data[$field]);
         }
 
         return $data;
