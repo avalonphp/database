@@ -68,6 +68,13 @@ abstract class Model extends BaseModel
     protected static $_hasMany = [];
 
     /**
+     * Validations to run.
+     *
+     * @var array
+     */
+    protected static $_validates = [];
+
+    /**
      * Validation errors.
      */
     protected $_errors = [];
