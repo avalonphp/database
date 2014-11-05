@@ -61,24 +61,6 @@ abstract class Base
     // Class Methods
 
     /**
-     * Convert special data to a safely storable format.
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    public static function convertFromDataTypes(array $data)
-    {
-        foreach (static::$_dataTypes as $column => $type) {
-            if ($type == 'json_array') {
-                $data[$column] = json_encode($data[$column]);
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Convert data from a safely storable format to actual values.
      *
      * @param array $data

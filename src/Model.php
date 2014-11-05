@@ -141,8 +141,7 @@ abstract class Model extends BaseModel
      */
     public static function insert($data, array $types = [])
     {
-        $data = static::convertFromDataTypes($data);
-        return static::connection()->insert(static::tableName(), $data, $types);
+        return static::connection()->insert(static::tableName(), $data, static::$_dataTypes + $types);
     }
 
     /**
@@ -279,7 +278,7 @@ abstract class Model extends BaseModel
         }
 
         $data  = $this->getData();
-        $types = [];
+        $types = static::$_dataTypes;
 
         // Create row if this is a new model
         if ($this->_isNew) {
@@ -300,7 +299,6 @@ abstract class Model extends BaseModel
                 $types['updated_at'] = 'datetime';
             }
 
-            $data = static::convertFromDataTypes($data);
             $result = static::connection()->update(
                 static::tableName(), $data,
                 ['id' => $this->id],
