@@ -306,7 +306,18 @@ abstract class Model extends BaseModel
             );
         }
 
+        $this->refetchRow();
+
         return $result > 0 ? true : false;
+    }
+
+    /**
+     * Fetches the model data from the database.
+     */
+    public function refetchRow()
+    {
+        $data = static::where('id = ?', $this->id)->execute()->fetch();
+        $this->set(static::convertFromDataTypes($data));
     }
 
     /**
