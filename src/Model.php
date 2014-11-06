@@ -308,7 +308,7 @@ abstract class Model extends BaseModel
 
         $this->refetchRow();
 
-        return $result > 0 ? true : false;
+        return true;
     }
 
     /**
