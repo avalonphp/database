@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2014 Jack Polgar
+ * Copyright 2011-2015 Jack Polgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
 use Avalon\Database\Inflector;
 use Avalon\Database\Model\Relatable;
+use Avalon\Database\Model\Filterable;
 use Avalon\Database\Model\Validatable;
 
 /**
@@ -34,6 +35,7 @@ use Avalon\Database\Model\Validatable;
 abstract class Model extends BaseModel
 {
     use Relatable;
+    use Filterable;
     use Validatable;
 
     /**
@@ -56,6 +58,20 @@ abstract class Model extends BaseModel
      * @var array
      */
     protected static $_schema = [];
+
+    /**
+     * Before filters.
+     *
+     * @var array
+     */
+    protected static $_before = [];
+
+    /**
+     * After filters.
+     *
+     * @var array
+     */
+    protected static $_after = [];
 
     /**
      * Belongs-to relationships.
@@ -277,11 +293,14 @@ abstract class Model extends BaseModel
             return false;
         }
 
-        $data  = $this->getData();
         $types = static::$_dataTypes;
 
         // Create row if this is a new model
         if ($this->_isNew) {
+            $this->runFilters('before', 'create');
+
+            $data = $this->getData();
+
             if (isset(static::schema()['created_at'])) {
                 $data['created_at'] = new DateTime('now');
                 $types['created_at'] = 'datetime';
@@ -294,10 +313,16 @@ abstract class Model extends BaseModel
                 $this->id     = static::connection()->lastInsertId();
             }
         } else {
+            $this->runFilters('before', 'create');
+
+            $data = $this->getData();
+
             if (isset(static::schema()['updated_at'])) {
                 $data['updated_at'] = new DateTime('now');
                 $types['updated_at'] = 'datetime';
             }
+
+            $this->runFilters('before', 'update');
 
             $result = static::connection()->update(
                 static::tableName(),
