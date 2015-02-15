@@ -300,7 +300,8 @@ abstract class Model extends BaseModel
             }
 
             $result = static::connection()->update(
-                static::tableName(), $data,
+                static::tableName(),
+                $data,
                 ['id' => $this->id],
                 $types
             );

@@ -81,7 +81,7 @@ trait Relatable
         // Belongs-to relationships
         if (isset(static::$_belongsTo[$method])) {
             return $this->_relationsCache[$method] = $this->belongsTo($method, static::$_belongsTo[$method]);
-        } else if (in_array($method, static::$_belongsTo)) {
+        } elseif (in_array($method, static::$_belongsTo)) {
             return $this->_relationsCache[$method] = $this->belongsTo($method);
         }
 

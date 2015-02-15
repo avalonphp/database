@@ -99,5 +99,4 @@ abstract class Base
             $this->{$field} = $value;
         }
     }
-
 }
