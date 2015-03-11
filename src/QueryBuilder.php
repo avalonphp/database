@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2014 Jack Polgar
+ * Copyright 2011-2015 Jack Polgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 namespace Avalon\Database;
 
-use Doctrine\DBAL\Query\QueryBuilder as DoctrienQueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 
 /**
  * Query Builder based on Doctrine's Query Builder to add support for fetching
@@ -26,7 +26,7 @@ use Doctrine\DBAL\Query\QueryBuilder as DoctrienQueryBuilder;
  *
  * @author Jack Polgar <jack@polgar.id.au>
  */
-class QueryBuilder extends DoctrienQueryBuilder
+class QueryBuilder extends DoctrineQueryBuilder
 {
     /**
      * @var string
