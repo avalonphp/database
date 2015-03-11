@@ -139,6 +139,21 @@ class QueryBuilder extends DoctrineQueryBuilder
     }
 
     /**
+     * Limit results.
+     *
+     * @param integer $firstResult
+     * @param integer $maxResults
+     */
+    public function limit($firstResult, $maxResults = null)
+    {
+        $this->setFirstResult($firstResult);
+
+        if ($maxResults) {
+            $this->setMaxResults($maxResults);
+        }
+    }
+
+    /**
      * @param string  $predicates The restriction predicates.
      * @param mixed   $value      Value of the restriction.
      * @param integer $type       One of the PDO::PARAM_* constants.
