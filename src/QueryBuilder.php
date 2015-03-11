@@ -154,6 +154,26 @@ class QueryBuilder extends DoctrineQueryBuilder
     }
 
     /**
+     * Quote the passed string or strings in array.
+     *
+     * @param mixed $string
+     *
+     * @return mixed
+     */
+    public function quote($string)
+    {
+        if (is_array($string)) {
+            foreach ($string as $key => $value) {
+                $string[$key] = $this->quote($value);
+            }
+
+            return $string;
+        } else {
+            return $this->getConnection()->quote($string);
+        }
+    }
+
+    /**
      * @param string  $predicates The restriction predicates.
      * @param mixed   $value      Value of the restriction.
      * @param integer $type       One of the PDO::PARAM_* constants.
