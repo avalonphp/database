@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "doctrine/dbal": "2.4.*"
+        "doctrine/dbal": "2.5.*"
     },
     "require-dev": {
         "nirix/phail-safe": "0.2.*"
