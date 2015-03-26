@@ -107,7 +107,7 @@ abstract class Model extends BaseModel
     public function __construct(array $data = [], $isNew = true)
     {
         foreach (static::schema() as $field => $properties) {
-            $this->{$field} = $properties->getdefault();
+            $this->{$field} = $properties->getDefault();
         }
 
         parent::__construct($data, $isNew);
