@@ -157,6 +157,7 @@ abstract class Model extends BaseModel
      */
     public static function insert($data, array $types = [])
     {
+        unset($data['id']);
         return static::connection()->insert(static::tableName(), $data, static::$_dataTypes + $types);
     }
 
