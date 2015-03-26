@@ -308,9 +308,15 @@ abstract class Model extends BaseModel
 
             $result = static::insert($data, $types);
 
+            $lastInsertId = static::connection()->lastInsertId();
+
+            if (!$lastInsertId) {
+                $lastInsertId = static::connection()->lastInsertId(static::tableName() . "_id_seq");
+            }
+
             if ($result) {
                 $this->_isNew = false;
-                $this->id     = static::connection()->lastInsertId();
+                $this->id     = $lastInsertId;
             }
         } else {
             $this->runFilters('before', 'create');
