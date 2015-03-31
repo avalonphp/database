@@ -99,4 +99,12 @@ abstract class Base
             $this->{$field} = $value;
         }
     }
+
+    /**
+     * @return boolean
+     */
+    public function isNew()
+    {
+        return $this->_isNew;
+    }
 }
