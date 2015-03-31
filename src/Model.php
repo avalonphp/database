@@ -320,7 +320,7 @@ abstract class Model extends BaseModel
                 $this->id     = $lastInsertId;
             }
         } else {
-            $this->runFilters('before', 'create');
+            $this->runFilters('before', 'save');
 
             $data = $this->getData();
 
