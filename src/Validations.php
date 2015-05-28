@@ -71,7 +71,13 @@ class Validations
      */
     private static function unique(BaseModel $model, $field)
     {
-        $row = $model::find($field, $model->{$field});
+        $value = $model->{$field};
+
+        if ($value === null) {
+            $value = '';
+        }
+
+        $row = $model::find($field, $value);
         if ($row && $row->id != $model->id) {
             return 'already_in_use';
         }
