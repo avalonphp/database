@@ -97,6 +97,25 @@ class Validations
     }
 
     /**
+     * Check two fields to check if they match.
+     *
+     * @param  BaseModel $model
+     * @param  string    $field
+     * @param  string    $confirmField
+     *
+     * @return array|null
+     */
+    private static function confirm(BaseModel $model, $field, $confirmField)
+    {
+        if ($model->{$field} !== $model->{$confirmField}) {
+            return [
+                'error' => "fields_dont_match",
+                'field' => $field
+            ];
+        }
+    }
+
+    /**
      * Checks if the field is an email address.
      *
      * @param BaseModel $model
