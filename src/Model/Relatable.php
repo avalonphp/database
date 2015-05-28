@@ -121,9 +121,17 @@ trait Relatable
             $options['foreignKey'] = 'id';
         }
 
-        return $this->_relationsCache[$model] = $options['model']::select()
-            ->where("{$options['foreignKey']} = ?", $this->{$options['localKey']})
-            ->fetch();
+        // Make sure local value isn't null
+        if ($this->{$options['localKey']} !== null) {
+            $object = $this->_relationsCache[$model] = $options['model']::select()
+                ->where("{$options['foreignKey']} = ?", $this->{$options['localKey']});
+        }
+
+        if (isset($object) && $object->rowCount()) {
+            return $object->fetch();
+        } else {
+            return false;
+        }
     }
 
     /**
