@@ -91,11 +91,6 @@ class Validations
      */
     private static function required(BaseModel $model, $field)
     {
-        // if ($field == 'display_order') {
-        //     echo $field;
-        //     var_dump($model->{$field} === '');
-        //     exit;
-        // }
         if (!isset($model->{$field}) || ($model->{$field} === '')) {
             return 'required';
         }
