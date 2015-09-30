@@ -18,6 +18,8 @@
 
 namespace Avalon\Database\Model;
 
+use Avalon\Language;
+
 /**
  * Errors model trait.
  *
@@ -33,6 +35,78 @@ trait Errors
     public function errors()
     {
         return $this->_errors;
+    }
+
+    /**
+     * Check if a field has an error.
+     *
+     * @param string $field
+     *
+     * @return boolean
+     */
+    public function hasError($field)
+    {
+        if (isset($this->_errors[$field])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get error(s) for a field.
+     *
+     * @param string $field
+     *
+     * @return array|null
+     */
+    public function getError($field)
+    {
+        if (isset($this->_errors[$field])) {
+            return $this->_errors[$field];
+        }
+    }
+
+    /**
+     * Get the translated error message(s) for a field.
+     *
+     * @param string $field
+     *
+     * @return array|null
+     */
+    public function getErrorMessage($field)
+    {
+        if (isset($this->_errors[$field])) {
+            $messages = [];
+
+            foreach ($this->_errors[$field] as $error) {
+                $error['field'] = Language::translate($field);
+                $messages[] = Language::translate("errors.validations.{$error['error']}", $error);
+            }
+
+            return $messages;
+        }
+    }
+
+    /**
+     * Get translated error messages.
+     *
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        if (count($this->_errors)) {
+            $messages = [];
+
+            foreach ($this->_errors as $field => $errors) {
+                foreach ($errors as $error) {
+                    $error['field'] = Language::translate($field);
+                    $messages[$field][] = Language::translate("errors.validations.{$error['error']}", $error);
+                }
+            }
+
+            return $messages;
+        }
     }
 
     /**
