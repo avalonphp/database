@@ -107,7 +107,7 @@ class Validations
      */
     private static function confirm(BaseModel $model, $field, $confirmField)
     {
-        if ($model->{$field} !== $model->{$confirmField}) {
+        if (!isset($model->{$confirmField}) || $model->{$field} !== $model->{$confirmField}) {
             return [
                 'error' => "fields_dont_match",
                 'field' => $field
