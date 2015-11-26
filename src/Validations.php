@@ -58,7 +58,7 @@ class Validations
                     'validation' => $validation
                 ];
 
-                $model->addError($field, $validation, $data);
+                $model->addValidationError($field, $data, $validation);
             }
         }
     }
@@ -105,13 +105,23 @@ class Validations
      *
      * @return array|null
      */
-    private static function confirm(BaseModel $model, $field, $confirmField)
+    private static function confirm(BaseModel $model, $field, $options)
     {
-        if (!isset($model->{$confirmField}) || $model->{$field} !== $model->{$confirmField}) {
-            return [
-                'error' => "fields_dont_match",
-                'field' => $field
-            ];
+        $options = $options + ['onlyNew' => false];
+
+        if (!is_array($options)) {
+            $options = ['field' => $options];
+        }
+
+        $confirmField = $options['field'];
+
+        if (!$options['onlyNew']) {
+            if (!isset($model->{$confirmField}) || $model->{$field} !== $model->{$confirmField}) {
+                return [
+                    'error' => "fields_dont_match",
+                    'field' => $field
+                ];
+            }
         }
     }
 

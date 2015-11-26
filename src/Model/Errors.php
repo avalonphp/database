@@ -81,7 +81,7 @@ trait Errors
 
             foreach ($this->_errors[$field] as $error) {
                 $error['field'] = Language::translate($field);
-                $messages[] = Language::translate("errors.validations.{$error['error']}", $error);
+                $messages[] = Language::translate($error['error'], $error);
             }
 
             return $messages;
@@ -101,7 +101,7 @@ trait Errors
             foreach ($this->_errors as $field => $errors) {
                 foreach ($errors as $error) {
                     $error['field'] = Language::translate($field);
-                    $messages[$field][] = Language::translate("errors.validations.{$error['error']}", $error);
+                    $messages[$field][] = Language::translate($error['error'], $error);
                 }
             }
 
@@ -113,10 +113,10 @@ trait Errors
      * Adds an error for the specified field.
      *
      * @param string $field
-     * @param string $index
      * @param mixed  $data
+     * @param string $index
      */
-    public function addError($field, $index, $data)
+    public function addError($field, $data, $index = null)
     {
         if (!isset($this->_errors[$field])) {
             $this->_errors[$field] = [];
@@ -127,5 +127,21 @@ trait Errors
         } else {
             $this->_errors[$field][] = $data;
         }
+    }
+
+    /**
+     * Adds a validation error for the specified field.
+     *
+     * @param string $field
+     * @param mixed  $data
+     * @param string $index
+     */
+    public function addValidationError($field, $data, $index = null)
+    {
+        if (isset($data['error'])) {
+            $data['error'] = "errors.validations.{$data['error']}";
+        }
+
+        $this->addError($field, $data, $index);
     }
 }
