@@ -117,7 +117,7 @@ class Validations
 
         $confirmField = $options['field'];
 
-        if (!$options['onlyNew']) {
+        if ($options['onlyNew'] === true && $model->isNew()) {
             if (!isset($model->{$confirmField}) || $model->{$field} !== $model->{$confirmField}) {
                 return [
                     'error' => "fields_dont_match",
