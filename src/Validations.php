@@ -107,10 +107,12 @@ class Validations
      */
     private static function confirm(BaseModel $model, $field, $options)
     {
+        $options = (array) $options;
+
         $options = $options + ['onlyNew' => false];
 
-        if (!is_array($options)) {
-            $options = ['field' => $options];
+        if (!isset($options['field'])) {
+            $options['field'] = "{$field}_confirmation";
         }
 
         $confirmField = $options['field'];
