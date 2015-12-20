@@ -200,7 +200,14 @@ abstract class Model extends BaseModel
         $builder = new QueryBuilder(static::connection());
         $builder->setModel(get_called_class());
 
-        return $builder->select($select)->from(static::tableName(), static::tableName());
+        $args = func_get_args();
+
+        if (!count($args)) {
+            $args = ['*'];
+        }
+
+        return call_user_func_array([$builder, 'select'], $args)
+            ->from(static::tableName(), static::tableAlias());
     }
 
     /**
