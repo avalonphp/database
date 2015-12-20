@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2015 Jack Polgar
+ * Copyright 2011-2015 Jack P.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
  * Query Builder based on Doctrine's Query Builder to add support for fetching
  * data with a model.
  *
- * @author Jack Polgar <jack@polgar.id.au>
+ * @author Jack P.
  */
 class QueryBuilder extends DoctrineQueryBuilder
 {
@@ -54,23 +54,25 @@ class QueryBuilder extends DoctrineQueryBuilder
     {
         $statement = $this->execute();
 
+        $class = $this->modelClass;
         if ($data = $statement->fetch()) {
-            return new $this->modelClass($data, false);
+            return new $class($data, false);
         } else {
             return $data;
         }
     }
 
     /**
-     * @return \Avalon\Datbase\Model[]
+     * @return \Avalon\Database\Model[]
      */
     public function fetchAll()
     {
         $statement = $this->execute();
 
         $rows = [];
+        $class = $this->modelClass;
         foreach ($statement->fetchAll() as $row) {
-            $rows[] = new $this->modelClass($row, false);
+            $rows[] = new $class($row, false);
         }
 
         return $rows;
@@ -78,12 +80,10 @@ class QueryBuilder extends DoctrineQueryBuilder
 
     /**
      * @param string  $predicates The restriction predicates.
-     * @param mixed   $value      Value of the restriction.
-     * @param integer $type       One of the PDO::PARAM_* constants.
      *
      * @return QueryBuilder
      */
-    public function where($predicates, $value = null, $type = \PDO::PARAM_STR)
+    public function where($predicates)
     {
         if ($this->mergeNextWhere) {
             $this->mergeNextWhere = false;
@@ -92,28 +92,17 @@ class QueryBuilder extends DoctrineQueryBuilder
             parent::where($predicates);
         }
 
-        if ($value !== null) {
-            $this->_setParameter($predicates, $value, $type);
-        }
-
         return $this;
     }
 
     /**
      * @param string  $predicates The restriction predicates.
-     * @param mixed   $value      Value of the restriction.
-     * @param integer $type       One of the PDO::PARAM_* constants.
      *
      * @return QueryBuilder
      */
-    public function andWhere($predicates, $value = null, $type = \PDO::PARAM_STR)
+    public function andWhere($predicates)
     {
         parent::andWhere($predicates);
-
-        if ($value !== null) {
-            $this->_setParameter($predicates, $value, $type);
-        }
-
         return $this;
     }
 
@@ -139,21 +128,6 @@ class QueryBuilder extends DoctrineQueryBuilder
     }
 
     /**
-     * Limit results.
-     *
-     * @param integer $firstResult
-     * @param integer $maxResults
-     */
-    public function limit($firstResult, $maxResults = null)
-    {
-        $this->setFirstResult($firstResult);
-
-        if ($maxResults) {
-            $this->setMaxResults($maxResults);
-        }
-    }
-
-    /**
      * Quote the passed string or strings in array.
      *
      * @param mixed $string
@@ -170,23 +144,6 @@ class QueryBuilder extends DoctrineQueryBuilder
             return $string;
         } else {
             return $this->getConnection()->quote($string);
-        }
-    }
-
-    /**
-     * @param string  $predicates The restriction predicates.
-     * @param mixed   $value      Value of the restriction.
-     * @param integer $type       One of the PDO::PARAM_* constants.
-     */
-    protected function _setParameter($predicates, $value, $type)
-    {
-        if (strpos($predicates, ':')) {
-            preg_match("/(?P<placeholder>:[\w\d\_]+)/", $predicates, $matches);
-            $placeholder = $matches['placeholder'];
-
-            $this->createNamedParameter($value, $type, $placeholder);
-        } else {
-            $this->createPositionalParameter($value, $type);
         }
     }
 }
