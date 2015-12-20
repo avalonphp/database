@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2014 Jack Polgar
+ * Copyright 2011-2015 Jack P.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ use Avalon\Language;
 /**
  * Errors model trait.
  *
- * @author Jack Polgar <jack@polgar.id.au>
+ * @author Jack P.
  */
 trait Errors
 {
@@ -68,45 +68,15 @@ trait Errors
     }
 
     /**
-     * Get the translated error message(s) for a field.
+     * Get the error message(s) for a field.
      *
      * @param string $field
      *
-     * @return array|null
+     * @return array
      */
     public function getErrorMessage($field)
     {
-        if (isset($this->_errors[$field])) {
-            $messages = [];
-
-            foreach ($this->_errors[$field] as $error) {
-                $error['field'] = Language::translate($field);
-                $messages[] = Language::translate($error['error'], $error);
-            }
-
-            return $messages;
-        }
-    }
-
-    /**
-     * Get translated error messages.
-     *
-     * @return array
-     */
-    public function getErrorMessages()
-    {
-        if (count($this->_errors)) {
-            $messages = [];
-
-            foreach ($this->_errors as $field => $errors) {
-                foreach ($errors as $error) {
-                    $error['field'] = Language::translate($field);
-                    $messages[$field][] = Language::translate($error['error'], $error);
-                }
-            }
-
-            return $messages;
-        }
+        return isset($this->_errors[$field]) ? $this->_errors[$field] : [];
     }
 
     /**
@@ -136,12 +106,11 @@ trait Errors
      * @param mixed  $data
      * @param string $index
      */
-    public function addValidationError($field, $data, $index = null)
+    public function addValidationError($field, $validation, array $options = [], $index = null)
     {
-        if (isset($data['error'])) {
-            $data['error'] = "errors.validations.{$data['error']}";
-        }
-
-        $this->addError($field, $data, $index);
+        $this->addError(
+            $field,
+            Language::translate("errors.validations.{$validation}", ['field' => Language::translate($field)] + $options)
+        );
     }
 }
