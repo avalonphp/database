@@ -45,9 +45,7 @@ class ConnectionManager
     {
         $conn = DriverManager::getConnection($info);
 
-        if (isset($info['prefix'])) {
-            $conn->prefix = $info['prefix'];
-        }
+        $conn->prefix = isset($info['prefix']) ? $info['prefix'] : null;
 
         return static::$connections[$name] = $conn;
     }
