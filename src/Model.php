@@ -368,7 +368,7 @@ abstract class Model extends BaseModel
      */
     public function refetchRow()
     {
-        $data = static::where('id = ?', $this->id)->execute()->fetch();
+        $data = static::where('id = :id')->setParameter('id', $this->id)->execute()->fetch();
         $this->set(static::convertToDataTypes($data));
     }
 
