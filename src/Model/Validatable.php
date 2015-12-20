@@ -1,13 +1,13 @@
 <?php
-/*
+/*!
  * Avalon
- * Copyright 2011-2014 Jack Polgar
+ * Copyright 2011-2015 Jack P.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,35 +18,42 @@
 
 namespace Avalon\Database\Model;
 
-use Avalon\Database\Validations;
+use Avalon\Language;
+use Avalon\Validation\ModelValidator;
 
 /**
- * Model validations trait.
+ * Model validation trait to easily validate and get translated error messages.
  *
- * @author Jack Polgar <jack@polgar.id.au>
+ * @package Avalon\Validation
+ * @author Jack P.
+ * @since 2.0.0
  */
 trait Validatable
 {
-    use Errors;
-
     /**
-     * Validates the model data.
-     *
-     * @param array $data
-     *
      * @return boolean
      */
-    public function validates($data = null)
+    public function validate()
     {
-        // Get data if it wasn't passed
-        if ($data === null) {
-            $data = $this->getData();
+        $validator = new ModelValidator(static::$_validations, $this);
+
+        if (!$validator->validate()) {
+            foreach ($validator->errors as $field => $errors) {
+                foreach ($errors as $error => $options) {
+                    if (is_numeric($error)) {
+                        $error = $options;
+                        $options = [];
+                    }
+
+                    $name = Language::translate($field);
+                    $this->addError(
+                        $field,
+                        Language::translate("errors.validations.{$error}", ['field' => $name] + $options)
+                    );
+                }
+            }
         }
 
-        foreach (static::$_validates as $field => $validations) {
-            Validations::run($this, $field, $validations);
-        }
-
-        return count($this->_errors) == 0;
+        return !count($this->_errors);
     }
 }
