@@ -22,7 +22,6 @@ use DateTime;
 use ReflectionClass;
 use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
-use Avalon\Database\Model\Relatable;
 use Doctrine\Common\Inflector\Inflector;
 use Avalon\Database\Model\Filterable;
 use Avalon\Database\Model\Validatable;
@@ -34,7 +33,6 @@ use Avalon\Database\Model\Validatable;
  */
 abstract class Model extends BaseModel
 {
-    use Relatable;
     use Filterable;
     use Validatable;
 
@@ -79,16 +77,6 @@ abstract class Model extends BaseModel
      * @var array
      */
     protected static $_after = [];
-
-    /**
-     * Belongs-to relationships.
-     */
-    protected static $_belongsTo = [];
-
-    /**
-     * Has-many relationships.
-     */
-    protected static $_hasMany = [];
 
     /**
      * Validations to run.
