@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2015 Jack Polgar
+ * Copyright 2011-2015 Jack P.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,15 @@ use DateTime;
 use ReflectionClass;
 use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
-use Avalon\Database\Inflector;
 use Avalon\Database\Model\Relatable;
+use Doctrine\Common\Inflector\Inflector;
 use Avalon\Database\Model\Filterable;
 use Avalon\Database\Model\Validatable;
 
 /**
  * Database Model.
  *
- * @author Jack Polgar <jack@polgar.id.au>
+ * @author Jack P.
  */
 abstract class Model extends BaseModel
 {
@@ -211,10 +211,12 @@ abstract class Model extends BaseModel
     {
         if (static::$_tableName) {
             return static::$_tableName;
+        } else {
+            $classInfo = new ReflectionClass(get_called_class());
+            return static::$_tableName =
+                static::connection()->prefix. Inflector::pluralize(Inflector::tableize($classInfo->getShortName()));
         }
 
-        $classInfo = new ReflectionClass(get_called_class());
-        return Inflector::tableise($classInfo->getShortName());
     }
 
     /**
