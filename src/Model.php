@@ -22,9 +22,10 @@ use DateTime;
 use ReflectionClass;
 use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
-use Doctrine\Common\Inflector\Inflector;
 use Avalon\Database\Model\Filterable;
+use Avalon\Database\Model\Errors;
 use Avalon\Database\Model\Validatable;
+use Doctrine\Common\Inflector\Inflector;
 
 /**
  * Database Model.
@@ -35,6 +36,7 @@ abstract class Model extends BaseModel
 {
     use Filterable;
     use Validatable;
+    use Errors;
 
     /**
      * Connection name.
