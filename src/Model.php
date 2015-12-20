@@ -220,21 +220,23 @@ abstract class Model extends BaseModel
     {
         if (static::$_tableName) {
             return static::$_tableName;
-        } else {
-            $classInfo = new ReflectionClass(get_called_class());
-            return static::$_tableName =
-                static::connection()->prefix. Inflector::pluralize(Inflector::tableize($classInfo->getShortName()));
         }
+
+        $classInfo = new ReflectionClass(get_called_class());
+        return static::connection()->prefix. Inflector::pluralize(Inflector::tableize($classInfo->getShortName()));
     }
 
+    /**
+     * @return string
+     */
     public static function tableAlias()
     {
         if (static::$_tableAlias) {
             return static::$_tableAlias;
-        } else {
-            $classInfo = new ReflectionClass(get_called_class());
-            return static::$_tableAlias = Inflector::tableize($classInfo->getShortName());
         }
+
+        $classInfo = new ReflectionClass(get_called_class());
+        return Inflector::tableize($classInfo->getShortName());
     }
 
     /**
