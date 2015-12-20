@@ -319,7 +319,7 @@ abstract class Model extends BaseModel
         $types = static::$_dataTypes;
 
         foreach ($types as $column => $type) {
-            if ((!$this->{$column}) || $type == "datetime" && is_string($this->{$column})) {
+            if ((!$this->{$column}) || $type == 'datetime' && is_string($this->{$column})) {
                 unset($types[$column]);
             }
         }
@@ -340,7 +340,7 @@ abstract class Model extends BaseModel
             $lastInsertId = static::connection()->lastInsertId();
 
             if (!$lastInsertId) {
-                $lastInsertId = static::connection()->lastInsertId(static::tableName() . "_id_seq");
+                $lastInsertId = static::connection()->lastInsertId(static::tableName() . '_id_seq');
             }
 
             if ($result) {
