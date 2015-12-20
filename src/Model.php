@@ -126,7 +126,7 @@ abstract class Model extends BaseModel
     public static function find($field, $value = null)
     {
         if ($value === null) {
-            return static::where('id = :id')->setParameter('id', $value)->fetch();
+            return static::where('id = :id')->setParameter('id', $field)->fetch();
         } else {
             return static::where("{$field} = :findval")->setParameter('findval', $value)->fetch();
         }
