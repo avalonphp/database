@@ -88,7 +88,7 @@ abstract class Model extends BaseModel
      *
      * @var array
      */
-    protected static $_validates = [];
+    protected static $_validations = [];
 
     /**
      * Fields to remove when converting to array.
