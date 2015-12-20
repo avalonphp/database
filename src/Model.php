@@ -53,6 +53,13 @@ abstract class Model extends BaseModel
     protected static $_tableName;
 
     /**
+     * Table alias.
+     *
+     * @var string
+     */
+    protected static $_tableAlias;
+
+    /**
      * Table schema.
      *
      * @var array
@@ -216,7 +223,16 @@ abstract class Model extends BaseModel
             return static::$_tableName =
                 static::connection()->prefix. Inflector::pluralize(Inflector::tableize($classInfo->getShortName()));
         }
+    }
 
+    public static function tableAlias()
+    {
+        if (static::$_tableAlias) {
+            return static::$_tableAlias;
+        } else {
+            $classInfo = new ReflectionClass(get_called_class());
+            return static::$_tableAlias = Inflector::tableize($classInfo->getShortName());
+        }
     }
 
     /**
