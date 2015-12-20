@@ -30,6 +30,9 @@ use Doctrine\Common\Inflector\Inflector;
 /**
  * Database Model.
  *
+ * This class breaks the PSR standards a little to separate model variables from
+ * table columns.
+ *
  * @author Jack P.
  */
 abstract class Model extends BaseModel
