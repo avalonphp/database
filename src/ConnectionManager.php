@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2014 Jack Polgar
+ * Copyright 2011-2015 Jack P.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ use Doctrine\DBAL\DriverManager;
 /**
  * Database connection manager.
  *
- * @author Jack Polgar <jack@polgar.id.au>
+ * @author Jack P.
  */
 class ConnectionManager
 {
@@ -43,7 +43,13 @@ class ConnectionManager
      */
     public static function create($info, $name = 'default')
     {
-        return static::$connections[$name] = DriverManager::getConnection($info);
+        $conn = DriverManager::getConnection($info);
+
+        if (isset($info['prefix'])) {
+            $conn->prefix = $info['prefix'];
+        }
+
+        return static::$connections[$name] = $conn;
     }
 
     /**
