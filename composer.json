@@ -5,12 +5,12 @@
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "Jack Polgar",
-            "email": "jack@polgar.id.au"
+            "name": "Nirix"
         }
     ],
     "require": {
-        "doctrine/dbal": "2.5.*"
+        "avalon/validation": "^2.0",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "nirix/phail-safe": "0.2.*"
