@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2015 Jack Polgar
+ * Copyright 2011-2015 Jack P.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ namespace Avalon\Database\Model;
 /**
  * Filterable model trait.
  *
- * @author Jack Polgar <jack@polgar.id.au>
+ * @author Jack P.
  */
 trait Filterable
 {
