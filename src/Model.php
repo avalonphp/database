@@ -303,7 +303,7 @@ abstract class Model extends BaseModel
     public function save()
     {
         // Validate
-        if (!$this->validates()) {
+        if (!$this->validate()) {
             return false;
         }
 
