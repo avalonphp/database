@@ -1,7 +1,7 @@
 <?php
 /*
  * Avalon
- * Copyright 2011-2014 Jack Polgar
+ * Copyright 2011-2015 Jack P.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@
 
 namespace Avalon\Database\Model;
 
+use ArrayAccess;
+
 /**
  * Base model class.
  *
- * @author Jack Polgar <jack@polgar.id.au>
+ * @author Jack P.
  */
-abstract class Base
+abstract class Base implements ArrayAccess
 {
     /**
      * Whether or not the model already exists in the database.
@@ -106,5 +108,28 @@ abstract class Base
     public function isNew()
     {
         return $this->_isNew;
+    }
+
+    // -------------------------------------------------------------------------
+    // ArrayAccess
+
+    public function offsetExists($offset)
+    {
+        return isset($this->{$offset});
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->{$offset};
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->{$offset} = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->{$offset});
     }
 }
