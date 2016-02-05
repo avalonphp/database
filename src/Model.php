@@ -316,6 +316,7 @@ abstract class Model extends BaseModel
             return false;
         }
 
+        $wasNew = $this->_isNew;
         $types = static::$_dataTypes;
 
         foreach ($types as $column => $type) {
@@ -370,6 +371,8 @@ abstract class Model extends BaseModel
         }
 
         $this->refetchRow();
+
+        $this->runFilters('after', $wasNew ? 'create' : 'save');
 
         return true;
     }
