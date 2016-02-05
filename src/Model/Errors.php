@@ -38,6 +38,16 @@ trait Errors
     }
 
     /**
+     * Check if the model has errors.
+     *
+     * @return boolean
+     */
+    public function hasErrors()
+    {
+        return count($this->_errors) > 0 ? true : false;
+    }
+
+    /**
      * Check if a field has an error.
      *
      * @param string $field
