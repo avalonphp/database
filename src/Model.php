@@ -20,12 +20,13 @@ namespace Avalon\Database;
 
 use DateTime;
 use ReflectionClass;
+use Avalon\Database\Inflector;
 use Avalon\Database\QueryBuilder;
 use Avalon\Database\Model\Base as BaseModel;
-use Avalon\Database\Model\Filterable;
 use Avalon\Database\Model\Errors;
+use Avalon\Database\Model\Filterable;
+use Avalon\Database\Model\Relatable;
 use Avalon\Database\Model\Validatable;
-use Doctrine\Common\Inflector\Inflector;
 
 /**
  * Database Model.
@@ -37,9 +38,10 @@ use Doctrine\Common\Inflector\Inflector;
  */
 abstract class Model extends BaseModel
 {
-    use Filterable;
-    use Validatable;
     use Errors;
+    use Filterable;
+    use Relatable;
+    use Validatable;
 
     /**
      * Connection name.
