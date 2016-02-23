@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace Avalon\Database\Model;
+namespace Avalon\Database;
 
 use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
 
