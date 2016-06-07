@@ -86,6 +86,20 @@ abstract class Model extends BaseModel
     protected static $_after = [];
 
     /**
+     * Belongs-to relationships.
+     *
+     * @var array
+     */
+    protected static $_belongsTo = [];
+
+    /**
+     * Has-many relationships.
+     *
+     * @var array
+     */
+    protected static $_hasMany = [];
+
+    /**
      * Validations to run.
      *
      * @var array

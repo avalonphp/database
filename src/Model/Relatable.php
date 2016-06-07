@@ -128,7 +128,8 @@ trait Relatable
         // Make sure local value isn't null
         if ($this->{$options['localKey']} !== null) {
             $object = $this->_relationsCache[$model] = $options['model']::select()
-                ->where("{$options['foreignKey']} = ?", $this->{$options['localKey']});
+                ->where("{$options['foreignKey']} = :fk")
+                ->setParameter('fk', $this->{$options['localKey']});
         }
 
         if (isset($object) && $object->rowCount()) {
