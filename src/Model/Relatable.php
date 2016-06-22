@@ -128,8 +128,8 @@ trait Relatable
         // Make sure local value isn't null
         if ($this->{$options['localKey']} !== null) {
             $object = $this->_relationsCache[$model] = $options['model']::select()
-                ->where("{$options['foreignKey']} = :fk")
-                ->setParameter('fk', $this->{$options['localKey']});
+                ->where("{$options['foreignKey']} = :foreignKey")
+                ->setParameter('foreignKey', $this->{$options['localKey']});
         }
 
         if (isset($object) && $object->rowCount()) {
@@ -156,11 +156,12 @@ trait Relatable
         }
 
         if (!isset($options['foreignKey'])) {
-            $options['foreignKey'] = Inflector::foreignKey(static::tableName());
+            $options['foreignKey'] = Inflector::foreignKey(static::tableName(false));
         }
 
         return $options['model']::select()
-            ->where("{$options['foreignKey']} = ?", $this->{$options['localKey']})
+            ->where("{$options['foreignKey']} = :foreignKey")
+            ->setParameter('foreignKey', $this->{$options['localKey']})
             ->mergeNextWhere();
     }
 }

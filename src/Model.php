@@ -86,6 +86,13 @@ abstract class Model extends BaseModel
     protected static $_after = [];
 
     /**
+     * Validations to run.
+     *
+     * @var array
+     */
+    protected static $_validations = [];
+
+    /**
      * Belongs-to relationships.
      *
      * @var array
@@ -98,13 +105,6 @@ abstract class Model extends BaseModel
      * @var array
      */
     protected static $_hasMany = [];
-
-    /**
-     * Validations to run.
-     *
-     * @var array
-     */
-    protected static $_validations = [];
 
     /**
      * Fields to remove when converting to array.
@@ -232,14 +232,14 @@ abstract class Model extends BaseModel
     /**
      * @return string
      */
-    public static function tableName()
+    public static function tableName($withPrefix = true)
     {
         if (static::$_tableName) {
             return static::$_tableName;
         }
 
         $classInfo = new ReflectionClass(get_called_class());
-        return static::connection()->prefix. Inflector::pluralize(Inflector::tableize($classInfo->getShortName()));
+        return ($withPrefix ? static::connection()->prefix : '') . Inflector::pluralize(Inflector::tableize($classInfo->getShortName()));
     }
 
     /**
