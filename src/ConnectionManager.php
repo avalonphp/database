@@ -57,6 +57,6 @@ class ConnectionManager
      */
     public static function getConnection($name = 'default')
     {
-        return static::$connections[$name];
+        return isset(static::$connections[$name]) ? static::$connections[$name] : false;
     }
 }
