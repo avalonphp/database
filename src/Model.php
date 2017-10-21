@@ -124,7 +124,7 @@ abstract class Model extends BaseModel
     {
         if ($isNew) {
             foreach (static::schema() as $field => $properties) {
-                $this->{$field} = $properties->getDefault();
+                $this->{$field} = $properties->getDefault() === 'NULL' ? null : $properties->getDefault();
             }
         }
 
