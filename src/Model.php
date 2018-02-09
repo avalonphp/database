@@ -297,7 +297,8 @@ abstract class Model extends BaseModel
         $data = [];
         foreach (static::schema() as $field => $property) {
             if ($this->{$field} === '') {
-                $data[$field] = $property->getDefault();
+                // Sometimes when the default is NULL, the PHP value is string NULL instead of native null.
+                $data[$field] = $property->getDefault() === 'NULL' ? null : $property->getDefault();
             } else {
                 $data[$field] = $this->{$field};
             }
