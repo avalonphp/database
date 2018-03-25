@@ -125,6 +125,15 @@ abstract class Model extends BaseModel
         if ($isNew) {
             foreach (static::schema() as $field => $properties) {
                 $this->{$field} = $properties->getDefault() === 'NULL' ? null : $properties->getDefault();
+
+                // If the field default is a string and has come out of the DB wrapped in single quotes
+                // remove them from the start and end.
+                if (strpos($this->{$field}, "'") === 0) {
+                    $this->{$field} = substr(
+                        substr($this->{$field}, 0, -1),
+                        1
+                    );
+                }
             }
         }
 
